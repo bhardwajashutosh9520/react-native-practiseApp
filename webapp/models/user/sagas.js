@@ -1,7 +1,7 @@
-import {call , put, takeEvery} from 'redux-saga/effects';
-// importing firebase . 
-import firebaseDb from '../../firebase/firebase'
-
+import {call, put, takeEvery} from 'redux-saga/effects';
+// importing firebase .
+import firebaseDb from '../../firebase/firebase';
+import {db} from '../../firebase/firebase';
 
 function* getList(data) {
   yield put({
@@ -17,14 +17,21 @@ function* setCartData(data) {
   });
 }
 
-
 function* setFoodItems() {
-  let list  =  [];
-  firebaseDb.child('foodList').on('value' , snapshot => {
-    if(snapshot.val()!== null) {
-      list  = snapshot.val();
-    }
-  })
+  let list = [];
+  // firebaseDb.child('foodList').on('value', (snapshot) => {
+  //   if (snapshot.val() !== null) {
+  //     list = snapshot.val();
+  //   }
+  // });
+  db.collection('foodList')
+    .get()
+    .then((snapshot) => {
+      console.log('snapshot-----', snapshot, snapshot.query);
+    })
+    .catch((err) => {
+      console.log('error-----', err);
+    });
   yield put({
     type: 'SET_FOOD_ITEMS_ASYNC',
     payload: list['-MW-unCmKxw1PhCPh0zC'],
